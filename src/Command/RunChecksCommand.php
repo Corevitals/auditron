@@ -30,61 +30,62 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 final class RunChecksCommand extends Command
 {
-    /**
-     * @param iterable<CheckInterface> $checks
-     */
-    public function __construct(
-        private readonly iterable $checks
-    ) {
-        parent::__construct();
-    }
+    /** @param iterable<CheckInterface> $checks */
+    public function __construct(private readonly iterable $checks) { parent::__construct(); }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Auditron Security Checker');
+        $io->writeln('Scanning Symfony application...');
+        $io->newLine();
 
-        $hasFailures = false;
-        $runCount = 0;
+        $results = [];
+        $stats = ['passed' => 0, 'failed' => 0, 'warning' => 0, 'skipped' => 0];
 
         foreach ($this->checks as $check) {
-            $runCount++;
-            $io->section(sprintf('Check %d: %s', $runCount, $check->getName()));
-            $io->text($check->getDescription());
-
-            // Execute the domain logic
             $result = $check->run();
+            $results[] = $result;
+            $stats[$result->status->value]++;
 
-            // Format the output based on the resulting Enum state
-            match ($result->status) {
-                CheckStatus::PASSED => $io->success('PASSED'),
-                CheckStatus::WARNING => $io->warning('WARNING'),
-                CheckStatus::SKIPPED => $io->note('SKIPPED'),
-                CheckStatus::FAILED => $io->error('FAILED'),
-            };
+            // Print compact status line
+            $symbol = $this->getSymbol($result->status);
+            $io->writeln(sprintf(' %s %s', $symbol, $check->getName()));
+        }
 
-            // Display any contextual messages (e.g., violating files, exact CVEs)
-            if (!empty($result->messages)) {
+        $io->newLine();
+        $io->writeln('Scan completed.');
+        $io->newLine();
+
+        // Print Summary
+        $io->text(sprintf(
+            '%d checks performed | %d warnings | %d critical issues',
+            count($results),
+            $stats['warning'],
+            $stats['failed']
+        ));
+
+        // Display failure details at the bottom so they aren't lost
+        foreach ($results as $result) {
+            if (!$result->isSuccessful() && !empty($result->messages)) {
+                $io->section(sprintf('Issue in: %s', $result->checkName));
                 $io->listing($result->messages);
+
+                // if ($result->remediation) {
+                //     $io->block($result->remediation, 'HOW TO FIX', 'fg=black;bg=yellow', ' ', true);
+                // }
             }
-
-            // If any check explicitly fails, the entire run will return a failure code
-            if (!$result->isSuccessful()) {
-                $hasFailures = true;
-            }
         }
 
-        if ($runCount === 0) {
-            $io->warning('No security checks were registered.');
-            return Command::SUCCESS;
-        }
+        return ($stats['failed'] > 0) ? Command::FAILURE : Command::SUCCESS;
+    }
 
-        if ($hasFailures) {
-            $io->error('Audit complete. One or more security checks failed.');
-            return Command::FAILURE;
-        }
-
-        $io->success('Audit complete. All security checks passed.');
-        return Command::SUCCESS;
+    private function getSymbol(CheckStatus $status): string
+    {
+        return match ($status) {
+            CheckStatus::PASSED => '<info>✔</info>',
+            CheckStatus::WARNING => '<comment>⚠</comment>',
+            CheckStatus::FAILED => '<error>✘</error>',
+            CheckStatus::SKIPPED => '<fg=gray>–</>',
+        };
     }
 }
