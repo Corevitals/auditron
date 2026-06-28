@@ -18,8 +18,8 @@ namespace Corevitals\Auditron\Domain;
 
 enum CheckStatus: string
 {
-    case PASSED = 'passed';
-    case FAILED = 'failed';
+    case PASSED  = 'passed';
+    case FAILED  = 'failed';
     case WARNING = 'warning';
     case SKIPPED = 'skipped';
 }
