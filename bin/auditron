@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use Corevitals\Auditron\Command\RunChecksCommand;
+use Corevitals\Auditron\Check\DebugModeCheck;
+use Corevitals\Auditron\Check\InsecureFirewallCheck;
+
+$application = new Application('Auditron Symfony Security Checker', '1.0.0');
+
+// As the application grows, we can replace this array with a lightweight
+// Dependency Injection Container to automatically tag and inject CheckInterface services.
+$checks = [
+    new DebugModeCheck(),
+    new InsecureFirewallCheck(),
+];
+
+$application->add(new RunChecksCommand($checks));
+
+// Set the default command so users can just run `bin/security-checker`
+// without typing the command name.
+$application->setDefaultCommand('security:check', true);
+
+$application->run();
