@@ -5,10 +5,23 @@ declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Symfony\Component\Console\Application;
-use Corevitals\Auditron\Command\RunChecksCommand;
+use Corevitals\Auditron\Check\AutoloadFilesCheck;
+use Corevitals\Auditron\Check\ComposerSecurityCheck;
+use Corevitals\Auditron\Check\CsrfConfigurationCheck;
 use Corevitals\Auditron\Check\DebugModeCheck;
+use Corevitals\Auditron\Check\EnvVarSecurityCheck;
+use Corevitals\Auditron\Check\ExceptionLeakCheck;
+use Corevitals\Auditron\Check\FilePermissionsCheck;
+use Corevitals\Auditron\Check\ForbiddenFunctionsCheck;
+use Corevitals\Auditron\Check\GitignoreSecurityCheck;
+use Corevitals\Auditron\Check\HardcodedSecretsCheck;
+use Corevitals\Auditron\Check\InsecureDeserializationCheck;
 use Corevitals\Auditron\Check\InsecureFirewallCheck;
+use Corevitals\Auditron\Check\SensitiveExposureCheck;
+use Corevitals\Auditron\Check\SessionCookieFlagsCheck;
+use Corevitals\Auditron\Check\WeakPasswordHashersCheck;
+use Corevitals\Auditron\Command\RunChecksCommand;
+use Symfony\Component\Console\Application;
 
 $application = new Application('Auditron Symfony Security Checker', '1.0.0');
 
@@ -17,12 +30,25 @@ $application = new Application('Auditron Symfony Security Checker', '1.0.0');
 $checks = [
     new DebugModeCheck(),
     new InsecureFirewallCheck(),
+    new WeakPasswordHashersCheck(),
+    new CsrfConfigurationCheck(),
+    new ComposerSecurityCheck(),
+    new ForbiddenFunctionsCheck(),
+    new GitignoreSecurityCheck(),
+    new SessionCookieFlagsCheck(),
+    new HardcodedSecretsCheck(),
+    new FilePermissionsCheck(),
+    new EnvVarSecurityCheck(),
+    new InsecureDeserializationCheck(),
+    new AutoloadFilesCheck(),
+    new ExceptionLeakCheck(),
+    new SensitiveExposureCheck(),
 ];
 
 $application->add(new RunChecksCommand($checks));
 
-// Set the default command so users can just run `bin/security-checker`
+// Set the default command so users can just run `bin/auditron`
 // without typing the command name.
-$application->setDefaultCommand('security:check', true);
+$application->setDefaultCommand('auditron:scan', true);
 
 $application->run();

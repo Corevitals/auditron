@@ -25,7 +25,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'security:check',
+    name: 'auditron:scan',
     description: 'Runs the full suite of security and compliance audits.'
 )]
 final class RunChecksCommand extends Command

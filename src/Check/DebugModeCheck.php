@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Check <<projectversion>>
+ * Auditron v1.0.0
  * Author: Timothy Lorens (tlorens@corevitals.com)
  * File: DebugModeCheck.php
  * Created: Sunday, June 28th 2026

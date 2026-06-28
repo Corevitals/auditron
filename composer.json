@@ -1,11 +1,14 @@
 {
     "name": "corevitals/auditron",
     "description": "A standalone Symfony console application for executing security checks.",
+    "license": "MIT",
     "type": "library",
     "require": {
         "php": ">=8.2",
         "symfony/console": "^7.0",
-        "symfony/yaml": "^8.1"
+        "symfony/yaml": "^8.1",
+        "symfony/process": "^8.1",
+        "symfony/finder": "^8.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^11.0"
