@@ -43,7 +43,7 @@ final class RunChecksCommand extends Command
         $stats = ['passed' => 0, 'failed' => 0, 'warning' => 0, 'skipped' => 0];
 
         foreach ($this->checks as $check) {
-            $result = $check->run();
+            $result    = $check->run();
             $results[] = $result;
             $stats[$result->status->value]++;
 
@@ -82,9 +82,9 @@ final class RunChecksCommand extends Command
     private function getSymbol(CheckStatus $status): string
     {
         return match ($status) {
-            CheckStatus::PASSED => '<info>✔</info>',
+            CheckStatus::PASSED  => '<info>✔</info>',
             CheckStatus::WARNING => '<comment>⚠</comment>',
-            CheckStatus::FAILED => '<error>✘</error>',
+            CheckStatus::FAILED  => '<error>✘</error>',
             CheckStatus::SKIPPED => '<fg=gray>–</>',
         };
     }

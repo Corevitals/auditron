@@ -1,0 +1,52 @@
+# ==========================================
+# OS & File System
+# ==========================================
+.DS_Store
+._*
+.*~
+Thumbs.db
+ehthumbs.db
+
+# ==========================================
+# IDE & Editor Configuration
+# ==========================================
+.vscode/
+.idea/
+.project
+.settings/
+.buildpath
+
+# ==========================================
+# Symfony Specific & Application Build
+# ==========================================
+/vendor/
+/node_modules/
+/public/bundles/
+
+# Cache and Logs
+/var/cache/*
+/var/log/*
+!/var/cache/.gitkeep
+!/var/log/.gitkeep
+
+# Environment Configuration
+/.env.local
+/.env.local.php
+/.env.*.local
+
+# ==========================================
+# Testing & Code Quality Tools
+# ==========================================
+/phpunit.xml
+.phpunit/
+.phpunit.result.cache
+.phpunit.cache
+/phpcs.xml
+/.phpcs-cache
+.php_cs.cache
+
+# ==========================================
+# Dependency & Log Files
+# ==========================================
+npm-debug.log
+yarn-error.log
