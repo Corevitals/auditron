@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Domain <<projectversion>>
+ * Auditron v1.0.0
  * Author: Timothy Lorens (tlorens@corevitals.com)
  * File: CheckResult.php
  * Created: Sunday, June 28th 2026
