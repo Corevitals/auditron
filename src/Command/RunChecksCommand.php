@@ -82,10 +82,10 @@ final class RunChecksCommand extends Command
     private function getSymbol(CheckStatus $status): string
     {
         return match ($status) {
-            CheckStatus::PASSED  => '<info>✔</info>',
-            CheckStatus::WARNING => '<comment>⚠</comment>',
-            CheckStatus::FAILED  => '<error>✘</error>',
-            CheckStatus::SKIPPED => '<fg=gray>–</>',
+            CheckStatus::PASSED  => '[<fg=green>✔</>]',
+            CheckStatus::WARNING => '[<comment>⚠</comment>]',
+            CheckStatus::FAILED  => '[<fg=red>✘</>]',
+            CheckStatus::SKIPPED => '[<fg=gray>–</>]',
         };
     }
 }
