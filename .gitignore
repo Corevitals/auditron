@@ -22,6 +22,7 @@ ehthumbs.db
 /vendor/
 /node_modules/
 /public/bundles/
+composer.lock
 
 # Cache and Logs
 /var/cache/*
